@@ -1,0 +1,52 @@
+[gd_scene load_steps=5 format=3 uid="uid://cq4dxf05ab0hj"]
+
+[ext_resource type="Texture2D" uid="uid://dw78803r3x0ad" path="res://Assets/FreeCuteTileset/BG1.png" id="1_kln2b"]
+[ext_resource type="Texture2D" uid="uid://btejdf1dm4tq5" path="res://Assets/FreeCuteTileset/BG2.png" id="2_rgh2o"]
+[ext_resource type="Texture2D" uid="uid://brhx6jtffrqld" path="res://Assets/FreeCuteTileset/BG3.png" id="3_pbw6q"]
+[ext_resource type="PackedScene" uid="uid://p06hej5b2swp" path="res://Scenes/player.tscn" id="4_rgh2o"]
+
+[node name="Main" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("4_rgh2o")]
+position = Vector2(142, 90)
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="Mountains" type="ParallaxLayer" parent="ParallaxBackground"]
+texture_repeat = 2
+position = Vector2(0, 2)
+motion_scale = Vector2(0.1, 0.1)
+motion_mirroring = Vector2(320, 0)
+
+[node name="SpriteSky" type="Sprite2D" parent="ParallaxBackground/Mountains"]
+texture_repeat = 2
+position = Vector2(0, -11)
+texture = ExtResource("1_kln2b")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 320, 192)
+
+[node name="Sky" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.2, 0.2)
+motion_mirroring = Vector2(320, 0)
+
+[node name="SpriteMont" type="Sprite2D" parent="ParallaxBackground/Sky"]
+texture_repeat = 2
+position = Vector2(0, -11)
+texture = ExtResource("2_rgh2o")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 320, 192)
+
+[node name="Ground" type="ParallaxLayer" parent="ParallaxBackground"]
+texture_repeat = 2
+motion_scale = Vector2(0.6, 0.6)
+motion_mirroring = Vector2(320, 0)
+
+[node name="SpriteGrnd" type="Sprite2D" parent="ParallaxBackground/Ground"]
+texture_repeat = 2
+position = Vector2(0, -11)
+texture = ExtResource("3_pbw6q")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 320, 192)
