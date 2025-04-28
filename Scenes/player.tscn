@@ -93,6 +93,7 @@ hframes = 10
 frame = 1
 
 [node name="RunSprite" type="Sprite2D" parent="."]
+visible = false
 texture = ExtResource("3_6t5aa")
 hframes = 10
 frame = 1
