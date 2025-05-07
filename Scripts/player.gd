@@ -1,41 +1,66 @@
 extends CharacterBody2D
 
 @export var speed := 200
+@export var roll_speed := 160
 @onready var _animation_player = $AnimationPlayer
 var is_moving = false
-var on_ground = false
-var direcao = false # false -> direita; true -> esquerda
+var direction = false # 1:DIR | -1:ESQ
+var is_rolling = false
+
 
 func _physics_process(delta: float) -> void:
+	
 	var input_vector = Vector2.ZERO
 	input_vector.x = Input.get_action_strength("right") - Input.get_action_strength("left")
+	
+	if is_rolling:
+		if direction:
+			velocity.x = -roll_speed
+		else:
+			velocity.x = roll_speed
+		move_and_slide()
+		return 
 	
 	is_moving = input_vector.x != 0
 	velocity.x = input_vector.x * speed
 
 	move_and_slide()
 	
-	# Gravidade
-	if(not on_ground):
-		velocity.y += 2
-
-	if Input.is_action_pressed("right") and not Input.is_action_pressed("left"):
-		$IdleSprite.visible = false
-		$RunSprite.visible = true
-		$RunSprite.flip_h = false
-		_animation_player.play("run")
-		direcao = false
-
-	elif Input.is_action_pressed("left") and not Input.is_action_pressed("right"):
-		$IdleSprite.visible = false
-		$RunSprite.flip_h = true
-		$RunSprite.visible = true
-		_animation_player.play("run")
-		direcao = true
+	 # Ignora mudanças até que a rolagem termine
 	
-	else:
-		$IdleSprite.flip_h = direcao
-		$IdleSprite.visible = true
-		_animation_player.play("idle")
-		$RunSprite.visible = false
+	# Gravidade
+	if not is_on_floor():
+		velocity.y += 7
 		
+	# Direção
+	if velocity.x > 0:
+		direction = false
+	elif velocity.x < 0:
+		direction = true
+	
+	# Pulo
+	if Input.is_action_just_pressed("jump") and is_on_floor():
+		velocity.y = -200
+	
+
+
+
+	if not is_on_floor():
+		$AnimatedSprite2D.play("jump")
+		$AnimatedSprite2D.flip_h = direction
+	else:
+		if Input.is_action_just_pressed("roll"):
+			$AnimatedSprite2D.play("roll")
+			$AnimatedSprite2D.flip_h = direction
+			is_rolling = true
+			
+		elif is_moving:
+			$AnimatedSprite2D.play("run")
+			$AnimatedSprite2D.flip_h = direction
+			
+		else:
+			$AnimatedSprite2D.play("idle")
+			$AnimatedSprite2D.flip_h = direction
+
+func _on_animated_sprite_2d_animation_finished() -> void:
+	is_rolling = false
