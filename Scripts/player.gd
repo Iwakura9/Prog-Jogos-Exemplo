@@ -9,6 +9,7 @@ var is_moving = false
 var direction = false # 1:DIR | -1:ESQ
 var is_rolling = false
 var is_attacking = false
+var is_dead = false
 
 
 func _physics_process(delta: float) -> void:
@@ -32,6 +33,13 @@ func _physics_process(delta: float) -> void:
 		else:
 			velocity.x = 0
 		move_and_slide()
+		return
+		
+	if is_dead:
+		if not is_on_floor():
+			velocity.y += gravidade
+			velocity.x = 0
+			move_and_slide()
 		return
 	
 	is_moving = input_vector.x != 0
@@ -85,4 +93,3 @@ func _physics_process(delta: float) -> void:
 func _on_animated_sprite_2d_animation_finished() -> void:
 	is_rolling = false
 	is_attacking = false
-	
