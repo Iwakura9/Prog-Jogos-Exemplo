@@ -53,6 +53,7 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y += gravidade
 		
+		
 	# Direção
 	if velocity.x > 0:
 		direction = false
